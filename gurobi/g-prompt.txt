@@ -1,0 +1,139 @@
+Using gurobipy for python, I would like to perform an optimization to place of Schools S into N groups to maximize the enrollment weighted reimbursement rate R.
+Here is the problem.
+I have a set of schools, S. where each school is denoted as Si...Sn.
+Each school has enrollment k
+Each school has a proportion of the enrollment designated ISP
+Group rules: Schools can be group in to N groups where each school is in exactly 1 group, all schools must be in a group. There can be between 1 group and Sn groups. Each group must have 1 or more schools.
+For each group of schools the reimbursement can be calculated from the enrollment weighted average ISP of all schools in the group. this function where the weighed ISP is I:
+
+def compute_reimbursement(I):
+    # Heaviside function implementation
+    H = 1 if I > 0.625 else 0
+    
+    # Continuous formula
+    R = 4.5 * H + (4.5 * (I * 1.6) + 0.5 * (1 - I)) * (1 - H)
+    return R
+
+Objective 1: assign schools to groups to maximize the enrollment weighted reimbursement R for all groups (itself weighted by enrollment)
+
+Return a list of schools groups and the weighted R for each group and the weighted R for all schools.
+
+Data will be input as a pandas dataframe this form 
+
+STATE	LEA_NAME	SCHOOL	ISP	ISP_CATEGORY	PARTICIPATION_IN_CEP_(Y OR BLANK)	ENROLLMENT
+Alaska	ANCHORAGE SCHOOLS	ABBOTT LOOP ELEMENTARY	40.6%	40%-50%	N	286
+Alaska	ANCHORAGE SCHOOLS	AIRPORT HEIGHTS ELEMENTARY	62.2%	60% and higher	Y	274
+Alaska	ANCHORAGE SCHOOLS	ALASKA NATIVE CULTURAL CHARTER SCHOOL	47.7%	40%-50%	Y	254
+Alaska	ANCHORAGE SCHOOLS	BARTLETT HIGH SCHOOL	47.9%	40%-50%	Y	1268
+
+# prompt 2
+
+Using gurobipy for python, I would like to perform an optimization to place of Schools S into N groups to maximize the enrollment weighted reimbursement rate R.
+Here is the problem.
+I have a set of schools, S. where each school is denoted as Si...Sn.
+Each school has enrollment k
+Each school has a proportion of the enrollment designated ISP
+Group rules: 
+    - 1. Schools can be grouped in to N groups
+    - Each school is in exactly 1 group
+    - 2. all schools must be in a group.
+    - There can be between 1 group and Sn groups, where Sn is the total number of schools
+    - Each group must have 1 or more schools
+    
+For each group of schools a per meal per_meal_cep_reimbursement can be calculated as
+
+def per_meal_cep_reimbursement(I, free_rate=4.5, paid_rate=0.5):
+    """
+    Compute  the cep reimbursement rate based on enrollment weighted ISP of all schools.
+    """
+    if I >= 0.625:
+        return 4.5
+    elseif I > 0.25:
+        return (free_rate * I * 1.6) + paid_rate * (1 - I)
+    else:
+        return 0
+
+    The objective is to assign each school to a group in a way that maximizes the sum of the enrollment * per_meal_cep_reimbursement for all groups
+
+    Data will be input as a pandas dataframe this form 
+
+STATE	LEA_NAME	SCHOOL	ISP	ISP_CATEGORY	PARTICIPATION_IN_CEP_(Y OR BLANK)	ENROLLMENT
+Alaska	ANCHORAGE SCHOOLS	ABBOTT LOOP ELEMENTARY	40.6%	40%-50%	N	286
+Alaska	ANCHORAGE SCHOOLS	AIRPORT HEIGHTS ELEMENTARY	62.2%	60% and higher	Y	274
+Alaska	ANCHORAGE SCHOOLS	ALASKA NATIVE CULTURAL CHARTER SCHOOL	47.7%	40%-50%	Y	254
+Alaska	ANCHORAGE SCHOOLS	BARTLETT HIGH SCHOOL	47.9%	40%-50%	Y	1268
+
+# Prompt 3 with simplified linear objective
+
+Please create a new script using gurobipy for python, I would like to perform an optimization to place of Schools S into N groups to maximize the enrollment weighted reimbursement rate R.
+Here is the problem.
+I have a set of schools, S. where each school is denoted as Si...Sn.
+Each school has enrollment k
+Each school has a proportion of the enrollment designated ISP
+the variable ISP_count = round(ISP * enrollment) 
+Group rules: 
+    - 1. Schools can be grouped in to N groups
+    - Each school is in exactly 1 group
+    - 2. all schools must be in a group.
+    - There can be between 1 group and Sn groups, where Sn is the total number of schools
+    - Each group must have 1 or more schools
+    
+There is one objective:
+
+
+maximize the sum of enrollment from groups where group ISP is >= 0.25
+
+
+    Data will be input as a pandas dataframe this form 
+
+STATE	LEA_NAME	SCHOOL	ISP	ISP_CATEGORY	PARTICIPATION_IN_CEP_(Y OR BLANK)	ENROLLMENT
+Alaska	ANCHORAGE SCHOOLS	ABBOTT LOOP ELEMENTARY	40.6%	40%-50%	N	286
+Alaska	ANCHORAGE SCHOOLS	AIRPORT HEIGHTS ELEMENTARY	62.2%	60% and higher	Y	274
+Alaska	ANCHORAGE SCHOOLS	ALASKA NATIVE CULTURAL CHARTER SCHOOL	47.7%	40%-50%	Y	254
+Alaska	ANCHORAGE SCHOOLS	BARTLETT HIGH SCHOOL	47.9%	40%-50%	Y	1268
+
+actual data will be read in from a csv file example.csv
+
+after fitting the model please provide a comparison of  the sum of enrollement meeting the criteria
+For comparison provide the value when 1. all schools are in one group and 2. when each school is in its own group.
+
+
+prompt 5
+
+Using gurobipy for python, I would like to perform an optimization to place of Schools S into N groups to maximize the enrollment weighted reimbursement rate R.
+Here is the problem.
+I have a set of schools, S. where each school is denoted as Si...Sn.
+Each school has enrollment k
+Each school has a proportion of the enrollment designated ISP
+the variable ISP_count = round(ISP * enrollment)
+The number of groups N is given by the user
+Group rules: 
+    - Each school is in exactly 1 group
+
+
+For each group of schools  the grout ISP (I) canc be calculates as:
+
+I = sum(IST_count)/ sum(enrollment)
+
+The group reimbusement  can be calulated as 
+
+def per_meal_cep_reimbursement(ISP_Count: list, free_rate=4.5, paid_rate=0.5):
+    """
+    Compute  the cep reimbursement rate based on enrollment weighted ISP of all schools.
+    """
+    if I >= 0.625:
+        return 4.5
+    elseif I > 0.25:
+        return (free_rate * I * 1.6) + paid_rate * (1 - I)
+    else:
+        return 0
+
+    The objective is to assign each school to a group in a way that maximizes the sum of the enrollment * per_meal_cep_reimbursement for all groups
+
+    Data will be input as a pandas dataframe this form 
+
+STATE	LEA_NAME	SCHOOL	ISP	ISP_CATEGORY	PARTICIPATION_IN_CEP_(Y OR BLANK)	ENROLLMENT
+Alaska	ANCHORAGE SCHOOLS	ABBOTT LOOP ELEMENTARY	40.6%	40%-50%	N	286
+Alaska	ANCHORAGE SCHOOLS	AIRPORT HEIGHTS ELEMENTARY	62.2%	60% and higher	Y	274
+Alaska	ANCHORAGE SCHOOLS	ALASKA NATIVE CULTURAL CHARTER SCHOOL	47.7%	40%-50%	Y	254
+Alaska	ANCHORAGE SCHOOLS	BARTLETT HIGH SCHOOL	47.9%	40%-50%	Y	1268
