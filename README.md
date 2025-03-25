@@ -31,3 +31,11 @@ This is modified to create a piece-wise linear optimization problem which can be
 ## Notes
 
 For some districts the optimization is trivial because they fall above or below thresholds. For example if every schools in a LAS has an ISP >62.5 any grouping or no grouping will be the same. For LAS ear the 25% and 62.5% cut points the optimization tools  can improve coverage or reimbursement.
+
+## Gurobi 
+
+Both scripts currently use [Gurobi](https://www.gurobi.com), a commercial solver that requires a license.  In the future I may modify the scripts to work with  the Free solver from Google, [ORTools](https://developers.google.com/optimization)
+
+## ORtools
+
+I started converting the Gurobi models to ortools so they could be distributed freely. The reimbursement model converted easily. The student model is very slow now. I need to test CP-SAT and some other approaches in ortools,

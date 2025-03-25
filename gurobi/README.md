@@ -1,9 +1,18 @@
 # Mixed integer linear programming Optimizations for CEP School nutrition programs
 
+This directory contains  some prototype scripts testing the idea of using MILP for Some EP optimization tasks.
+ 
 ## Objective 1 Optimizing the number of students included in CEP qualifying groups
 
 the model `student_coverage_optimization.py` groups schools in a way that  all schools qualify  
 This was harder before the CEP percentage was lowered to 25%. it still may help some districts.
+The prototype script still hardcodes paths.
+
+_Example code_
+
+```{bash}
+time python student_coverage_optimization.py  
+```
 
 ## Objective 2 optimizing Reimbursement rates
 The model `reimbursement_optimization.py` groups schools to optimize the CEP payments
@@ -27,6 +36,11 @@ The  reimbursement rate formula is:
 
 This is modified to create a piece-wise linear optimization problem which can be more quickly solved.  The solver takes user input on the number of groups.  It's best to start with small er numbers first and see if they solve the problem 
 
+_Example code_
+
+```{bash}
+python reimmbursement_optimization.py --inputfile example.csv --groups 5
+```
 
 ## Notes
 
