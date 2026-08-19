@@ -24,7 +24,7 @@ $$
 
 Where $\omega_{g,s}$ represents the known enrollment percentage of that demographic group at school $s$ (harvested from your post-exit data and historical direct certification records).
 
-#### The Group Behavioral Constraints:
+### The Group Behavioral Constraints:
 
 *   **The Free Group ($y_f$):** Out-of-pocket price is \$0.00 both before and after the policy shift. Any drop in their participation is entirely driven by administrative/paperwork friction ($\delta_f$), not price elasticity.
 *   **The Reduced Group ($y_r$):** Out-of-pocket price shifts from $0.00 to $0.40. They have low-to-moderate price sensitivity.
