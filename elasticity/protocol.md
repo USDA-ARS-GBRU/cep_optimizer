@@ -8,12 +8,30 @@
 * **Centered Running Variable ($\tilde{X}_{s}$):** $X_{s} - 0.625$. Centering places the policy threshold exactly at zero, allowing direct interpretation of the intercept shift.
 * **Outcome Variable ($Y_{s}$):** Average Daily Participation (ADP) Rate, calculated as $\frac{\text{Average Daily Meals Served}}{\text{Total School Enrollment}}$.
 
-## Step 2: Handle the Historical Data Asymmetry
 
-Because individual meal categories (Free/Reduced/Paid) are unobserved during CEP years, you must isolate the total school-level demand shock at the cutoff, and then scale it by the school’s underlying demographic profile.
+## Step 2: Resolve the Co-mingled Demand Asymmetry (The Three-Group Mixture Model)
 
-1. Match each school's post-CEP data with its historical pre-exit data.
-2. Use **Synthetic Cohort Back-Casting** to estimate the baseline paid-eligible demographic pool for the CEP years.
+During CEP years, register data only tracks *Total Meals Served* $Y_{total, s}$, hiding the individual behavior of the three distinct demographic groups ($g$):
+1.  **Free Eligible ($f$):** Directly certified via SNAP/Medicaid or income applications.
+2.  **Reduced Eligible ($r$):** Households between 130% and 185% of the federal poverty line.
+3.  **Paid Tier ($p$):** Full-price, higher-income students.
+
+To isolate true elasticity, your model must recognize that **Total Demand is a weighted sum of three distinct, group-specific participation rates ($y_g$)**:
+
+$$
+Y_{total, s} = \omega_{f,s} \cdot y_{f,s} + \omega_{r,s} \cdot y_{r,s} + \omega_{p,s} \cdot y_{p,s}
+$$
+
+Where $\omega_{g,s}$ represents the known enrollment percentage of that demographic group at school $s$ (harvested from your post-exit data and historical direct certification records).
+
+#### The Group Behavioral Constraints:
+
+*   **The Free Group ($y_f$):** Out-of-pocket price is \$0.00 both before and after the policy shift. Any drop in their participation is entirely driven by administrative/paperwork friction ($\delta_f$), not price elasticity.
+*   **The Reduced Group ($y_r$):** Out-of-pocket price shifts from $0.00 to $0.40. They have low-to-moderate price sensitivity.
+*   **The Paid Group ($y_p$):** Out-of-pocket price spikes from \$0.00 to \$2.50/\$2.75. They possess the highest price elasticity ($\epsilon_p$) and drive the vast majority of the total volume crash.
+
+To impute the missing historical baseline, the model holds the post-exit structural relationships constant to back-cast the group-specific participation rates ($y_{f,pre}, y_{r,pre}, y_{p,pre}$) that mathematically sum to your known historical $Y_{total, pre}$.
+
 
 ## Step 3: Specify the RDD Econometric Model
 
